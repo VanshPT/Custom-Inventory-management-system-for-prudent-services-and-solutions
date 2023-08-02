@@ -1,0 +1,61 @@
+{% extends 'usms/basic.html' %}
+{% block body %}
+    <table border="1">
+        <thead>
+            <th>Sr.No</th>
+            <th>Item Name</th>
+            <th>Item Code</th>
+            <th>Purchase Quantity</th>
+            <th>Cost Per Item</th>
+            <th>Other Cost</th>
+            <th>Vendor Name</th>
+            <th>Date of Purchase</th>
+              <th class="col-greenl">Surat stock</th>
+              <th class="col-greenl">Daman Stock</th>
+              <th class="col-greenl">Ankleshvar Stock</th>
+            <th>Total Stock</th>
+            <th>Total Inventory Value</th>
+            <th>Reorder Quantity</th>
+            <th>Reorder Value</th>
+        </thead>
+        {% for i in items %}
+        <tr>
+          <td>{{i.Sr_No}}</td>
+          <td>{{i.Item_Name}}</td>
+          <td>
+            {% for code in icode %}
+                {% if code.inventory__Item_Name == i.Item_Name %}
+                    {{ code.Item_Code }}
+                {% endif %}
+            {% endfor %}
+          </td>
+          <td>{{i.Purchase_Quantity}}</td>
+          <td>{{i.Cost_Per_Item}}</td>
+          <td>{{i.Other_Cost}}</td>
+          <td>{{i.Vendor_Name}}</td>
+          <td>{{i.Date_of_Purchase}}</td>
+          <td class="col-green">{{i.Surat_Stock}}</td>
+          <td class="col-green">{{i.Daman_Stock}}</td>
+          <td class="col-green">{{i.Ankleshvar_Stock}}</td>
+          <td id="t-s-{{i.Sr_No}}">{{ i.Total_Stock }}</td>
+          <td>{{ i.Total_Inventory_Value }}</td>
+          <td>{{i.Reorder_Quantity}}</td>
+          <td>{{ i.Reorder_Value }}</td>
+        </tr>
+        {% endfor %}
+    </table> 
+ {% endblock %}
+ {% block js %}
+ <script>
+cssobj={color:'red','font-weight':"bold"}
+$(document).ready(function() {
+    {% for i in items %}
+    var totalStock{{ i.Sr_No }} = parseInt($('#t-s-{{ i.Sr_No }}').text());
+    if (totalStock{{ i.Sr_No }} <= 10) {
+      $('#t-s-{{ i.Sr_No }}').css(cssobj);
+    }
+    {% endfor %}
+  });
+
+</script>
+ {% endblock %}
